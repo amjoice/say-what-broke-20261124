@@ -10,18 +10,27 @@ Standard library only. Deterministic: the same bytes on every run.
 
 import os
 
-ENTRY = (
-    "Disk full. Your file is safe in memory, but memory forgets. "
-    "Free 100 MB or this work dies with the tab."
+# The failure, the reassurance, and the instruction — three short clauses,
+# one line, no padding. The twist is the middle one: unsaved work only
+# lives in memory, and memory forgets.
+_PARTS = (
+    "Disk full.",
+    "Your file is safe in memory, but memory forgets.",
+    "Free 100 MB or this work dies with the tab.",
 )
+
+
+def error_line() -> str:
+    """Assemble the entry line from its clauses."""
+    return " ".join(_PARTS)
 
 
 def main() -> None:
     output_dir = os.environ.get("OUTPUT_DIR", "/output")
     os.makedirs(output_dir, exist_ok=True)
     path = os.path.join(output_dir, "entry.txt")
-    with open(path, "w", encoding="utf-8", newline="\n") as f:
-        f.write(ENTRY + "\n")
+    with open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(error_line() + "\n")
 
 
 if __name__ == "__main__":
